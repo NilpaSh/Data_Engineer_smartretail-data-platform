@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Cleaned customer profiles from Silver layer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        description: "Customer email (may be null if invalid)"
+      - name: customer_segment
+        description: "B2B or B2C"
+        tests:
+          - accepted_values:
+              values: ['B2B', 'B2C']
+      - name: registration_date
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Cleaned and enriched order records"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['completed', 'shipped', 'processing', 'cancelled', 'returned']
+      - name: total_amount
+        tests:
+          - not_null
+      - name: order_date
+        tests:
+          - not_null
+
+  - name: stg_products
+    description: "Cleaned product catalog with margin analysis"
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: category
+        tests:
+          - not_null
+      - name: selling_price
+        tests:
+          - not_null
+
+  - name: stg_order_items
+    description: "Order line items with calculated totals"
+    columns:
+      - name: item_id
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+      - name: quantity
+        tests:
+          - not_null
+      - name: unit_price
+        tests:
+          - not_null
