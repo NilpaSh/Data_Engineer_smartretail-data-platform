@@ -1,0 +1,38 @@
+.env
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.log
+
+# Data files
+data/raw/
+data/processed/
+*.csv
+*.parquet
+*.json
+!fabric/pipelines/*.json
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+profiles.yml
+
+# Power BI
+*.pbix
+*.pbip
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/

@@ -1,0 +1,15 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short --strict-markers"
+markers   = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks integration tests that require data files",
+]
+
+[tool.coverage.run]
+source   = ["data_generation", "ingestion", "transformation", "analytics"]
+omit     = ["tests/*", "fabric/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under   = 70
